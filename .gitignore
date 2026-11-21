@@ -11,3 +11,6 @@ build/
 
 # local-only MCP config (points at localhost)
 .mcp.json
+
+# personal project notes for Claude (kept local)
+CLAUDE.md
