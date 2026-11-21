@@ -1,0 +1,21 @@
+[project]
+name = "gta6-mcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Ro25v04", email = "rohit25v04@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "mcp[cli]>=2.3.0",
+    "pytest>=9.2.0",
+]
+
+[project.scripts]
+gta6-mcp = "gta6_mcp:main"
+
+[build-system]
+requires = ["uv_build>=0.9.11,<0.10.0"]
+build-backend = "uv_build"
