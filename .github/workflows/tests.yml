@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6     # installs uv
-      - run: uv sync --locked           # same packages as uv.lock
-      - run: uv run pytest -q           # all tests, no internet needed
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked
+      - run: uv run pytest -q
