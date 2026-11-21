@@ -228,6 +228,10 @@ source = { editable = "." }
 dependencies = [
     { name = "httpx" },
     { name = "mcp", extra = ["cli"] },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "pytest" },
 ]
 
@@ -235,8 +239,10 @@ dependencies = [
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "mcp", extras = ["cli"], specifier = ">=2.3.0" },
-    { name = "pytest", specifier = ">=9.2.0" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=9.2.0" }]
 
 [[package]]
 name = "h11"
