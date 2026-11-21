@@ -1,0 +1,81 @@
+{
+ "title": "AfroBank FM",
+ "wikitext": "{{Infobox_media\n|Name Change=RADIO STATION\n|image=Afrobank-logo.0r-.t v9b~9l.png\n|caption=AfroBank FM logo in {{VI}}.\n|games={{Games|VI=y}}\n|locations=[[State of Leonida]]\n|status=active\n|host=Burna and Palmsy\n|genre=[[wp:Music_of_Africa|African]]\n}}\n'''AfroBank FM''' is a radio station due to appear in {{VI}}. The station features African music, including classics, amapiano, and 3-step, and is hosted by [[Burna]] and [[Palmsy]].<ref name=\"GTAVIRadio\">[https://www.rockstargames.com/VI/music/flash-fm ''The Music of Grand Theft Auto VI: In-Game Radio Stations''] ''Rockstar Games'', October 8, 2026.</ref>\n\n==Description==\nThe radio station was revealed on the [[GTA VI Website|Grand Theft Auto VI website]] in a Newswire post announcing some of the radio stations in Leonida. [[Rockstar Games]] describes AfroBank FM as featuring African music ranging from 20th-century classics and lesser-known tracks to contemporary genres such as amapiano and 3-step. The station is hosted by Burna and Palmsy.<ref name=\"GTAVIRadio\"/>\n\n==Tracklist==\n{{/Tracklist}}\n\n==See Also==\n* [[Radio Stations in GTA VI|Radio stations]]\n* [[IF99]] - An African music station in [[Grand Theft Auto IV]]\n\n==References==\n{{Reflist}}\n\n==Navigation==\n[[Category:Radio stations]]\n[[Category:Media in GTA VI]]\n[[Category:Radio Stations in GTA VI]]\n[[Category:World radio stations]]",
+ "sections": [
+  {
+   "toclevel": 1,
+   "level": "2",
+   "line": "Description",
+   "number": "1",
+   "index": "1",
+   "fromtitle": "AfroBank_FM",
+   "byteoffset": 611,
+   "anchor": "Description",
+   "linkAnchor": "Description"
+  },
+  {
+   "toclevel": 1,
+   "level": "2",
+   "line": "Tracklist",
+   "number": "2",
+   "index": "2",
+   "fromtitle": "AfroBank_FM",
+   "byteoffset": 1028,
+   "anchor": "Tracklist",
+   "linkAnchor": "Tracklist"
+  },
+  {
+   "toclevel": 1,
+   "level": "2",
+   "line": "See Also",
+   "number": "3",
+   "index": "3",
+   "fromtitle": "AfroBank_FM",
+   "byteoffset": 1058,
+   "anchor": "See_Also",
+   "linkAnchor": "See_Also"
+  },
+  {
+   "toclevel": 1,
+   "level": "2",
+   "line": "References",
+   "number": "4",
+   "index": "4",
+   "fromtitle": "AfroBank_FM",
+   "byteoffset": 1183,
+   "anchor": "References",
+   "linkAnchor": "References"
+  },
+  {
+   "toclevel": 1,
+   "level": "2",
+   "line": "Navigation",
+   "number": "5",
+   "index": "5",
+   "fromtitle": "AfroBank_FM",
+   "byteoffset": 1211,
+   "anchor": "Navigation",
+   "linkAnchor": "Navigation"
+  }
+ ],
+ "categories": [
+  {
+   "sortkey": "",
+   "category": "Radio_stations"
+  },
+  {
+   "sortkey": "",
+   "category": "Media_in_GTA_VI"
+  },
+  {
+   "sortkey": "",
+   "category": "Radio_Stations_in_GTA_VI",
+   "missing": true,
+   "known": true
+  },
+  {
+   "sortkey": "",
+   "category": "World_radio_stations"
+  }
+ ]
+}
