@@ -160,8 +160,18 @@ async def list_category(category: str, limit: int = 50) -> dict:
         if not filters.should_skip(m["title"], [])
     ]
     response = {"category": name, "url": _url(f"Category:{name}"), "count": len(pages), "pages": pages}
+    notes = []
     if len(members) == limit:
-        response["note"] = f"Showing the first {limit}; there may be more."
+        notes.append(f"Showing the first {limit}; there may be more.")
+    # Categories only include things with their own page. An overview article
+    # with the same name (e.g. "Radio Stations in GTA VI") often has the full list.
+    if await wiki.page_exists(name):
+        response["overview_page"] = name
+        notes.append(
+            "This category only lists items that have their own page, so it may be "
+            "incomplete. Read overview_page with get_article for the full list."
+        )
+    response["notes"] = notes
     return _with_source(response)
 
 

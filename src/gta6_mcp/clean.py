@@ -93,6 +93,7 @@ def _tidy(text: str) -> str:
     """Collapse the extra spaces and blank lines left behind."""
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r" *\n *", "\n", text)
+    text = re.sub(r"^[| ]+$", "", text, flags=re.MULTILINE)  # empty table rows like "| | |"
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
 
@@ -137,7 +138,8 @@ def parse_page(wikitext: str) -> dict:
     kept = []
     for title, nodes in sections:
         text = _tidy(_render(nodes))
-        if text and title.lower() not in SKIP_SECTIONS:
+        lowered = title.lower()
+        if text and lowered not in SKIP_SECTIONS and "leak" not in lowered:  # no leaked info
             kept.append({"title": title, "text": text})
 
     return {

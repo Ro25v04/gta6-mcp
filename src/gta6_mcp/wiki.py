@@ -60,6 +60,13 @@ async def get_page(title: str) -> dict | None:
     return data["parse"]
 
 
+async def page_exists(title: str) -> bool:
+    """Cheap check that an article exists, without downloading it."""
+    data = await _call({"action": "query", "titles": title})
+    pages = data.get("query", {}).get("pages", [])
+    return bool(pages) and not pages[0].get("missing") and not pages[0].get("invalid")
+
+
 async def category_members(category: str, limit: int = 50) -> list[dict]:
     """List article pages inside a category (exact name, without 'Category:')."""
     data = await _call({
