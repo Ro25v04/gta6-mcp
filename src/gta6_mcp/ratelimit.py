@@ -1,12 +1,9 @@
 """Per-visitor rate limit: stops one person or bot from flooding the server."""
 
-import logging
 import time
 from collections import defaultdict, deque
 
 from starlette.responses import JSONResponse
-
-logger = logging.getLogger("uvicorn.error")  # shows up in Railway's logs
 
 MAX_REQUESTS = 30   # per visitor...
 PER_SECONDS = 60    # ...per minute
@@ -21,13 +18,8 @@ class RateLimit:
 
     def _visitor_ip(self, scope) -> str:
         headers = dict(scope.get("headers") or [])
-        # TEMPORARY: see which addresses Railway's proxy sends. Remove once confirmed.
-        logger.info(
-            "rate-limit headers: x-real-ip=%r x-forwarded-for=%r",
-            headers.get(b"x-real-ip", b"").decode(),
-            headers.get(b"x-forwarded-for", b"").decode(),
-        )
-        # Railway's proxy puts the visitor's real address in X-Real-IP.
+        # Railway's proxy overwrites X-Real-IP with the visitor's real address,
+        # so it can't be faked (confirmed on the live server).
         real_ip = headers.get(b"x-real-ip", b"").decode().strip()
         if real_ip:
             return real_ip
