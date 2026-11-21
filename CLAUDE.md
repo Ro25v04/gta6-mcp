@@ -2,7 +2,7 @@ Project: gta6-mcp. Unofficial MCP server that lets any MCP-compatible AI app
 (Claude, ChatGPT, Cursor etc.) answer questions about GTA 6 using the GTA Wiki.
 
 Decisions so far:
-- Python, official MCP SDK (FastMCP), streamable-http transport
+- Python, official MCP SDK v2 (MCPServer, formerly FastMCP), streamable-http transport
 - Deploy on Railway (Hobby): listen on 0.0.0.0 and the PORT env var, endpoint /mcp
 - Data: GTA Wiki Fandom API (https://gta.fandom.com/api.php), live calls, no database
 - No agents or LLM calls inside the server; the client model is the agent
