@@ -122,6 +122,15 @@ async def get_article(title: str, section: str | None = None) -> dict:
         notes.append(SHORT_NOTE)
     if cut:
         notes.append(_cut_note(cut, section, url))
+    # Pages like "8F Drafter" cover GTA Online/V too; their quick facts (e.g. price)
+    # may not be GTA VI facts.
+    other_games = [t for t in section_titles if t.startswith("Grand Theft Auto") and t != "Grand Theft Auto VI"]
+    if other_games:
+        notes.append(
+            f"This page covers several games ({', '.join(other_games)}, Grand Theft Auto VI). "
+            "The quick facts and other details may be from another game. Only state something "
+            "as true for GTA VI if it's in the 'Grand Theft Auto VI' section or clearly says so."
+        )
 
     return _with_source({
         "title": page["title"],
