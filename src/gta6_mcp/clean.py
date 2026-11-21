@@ -157,24 +157,36 @@ def parse_page(wikitext: str) -> dict:
     }
 
 
-def to_text(page: dict, section: str | None = None, max_chars: int = MAX_CHARS) -> tuple[str, bool]:
+def to_text(page: dict, section: str | None = None, max_chars: int = MAX_CHARS) -> tuple[str, dict | None]:
     """Join a parsed page (or one section) into text, cut to max_chars.
 
-    Returns (text, was_truncated). Cuts at a paragraph break, never mid-sentence.
+    Returns (text, cut). cut is None if nothing was cut, otherwise
+    {"cut_in": section title cut partway, "not_included": [later section titles]},
+    so the caller can tell the AI exactly what's missing.
+    Cuts at a paragraph break, or a line break if that would lose too much.
     """
-    parts = []
+    parts = []  # (section title or None for quick facts, text)
     if section is None and page["facts"]:
-        parts.append("Quick facts:\n" + "\n".join(f"- {k}: {v}" for k, v in page["facts"].items()))
+        parts.append((None, "Quick facts:\n" + "\n".join(f"- {k}: {v}" for k, v in page["facts"].items())))
     for s in page["sections"]:
         if section is None or s["title"].lower() == section.lower():
-            parts.append(f"## {s['title']}\n{s['text']}")
-    text = "\n\n".join(parts)
+            parts.append((s["title"], f"## {s['title']}\n{s['text']}"))
+    text = "\n\n".join(p for _, p in parts)
 
     if len(text) <= max_chars:
-        return text, False
+        return text, None
     cut = text.rfind("\n\n", 0, max_chars)
     if cut < max_chars // 2:  # paragraph break too early (e.g. a long table): would lose too much
         cut = text.rfind("\n", 0, max_chars)
     if cut <= 0:
         cut = max_chars
-    return text[:cut].rstrip(), True
+
+    # Work out which section the cut landed in, and which sections were left out.
+    cut_in, not_included, start = None, [], 0
+    for title, part in parts:
+        if start < cut:
+            cut_in = title if cut < start + len(part) else None  # None: this part fit fully
+        elif title:
+            not_included.append(title)
+        start += len(part) + 2  # +2 for the "\n\n" joining parts
+    return text[:cut].rstrip(), {"cut_in": cut_in, "not_included": not_included}

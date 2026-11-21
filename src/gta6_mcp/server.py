@@ -68,6 +68,20 @@ async def search_gta6(query: str, limit: int = 5) -> dict:
     return _with_source(response)
 
 
+def _cut_note(cut: dict, section: str | None, url: str) -> str:
+    """Tell the AI exactly what was left out, so it doesn't treat a cut list as complete."""
+    if section:
+        return f"This section was cut for length and is incomplete; the full text is at {url}."
+    note = "Text was cut for length, so this is NOT the whole page."
+    if cut["cut_in"]:
+        note += f" It stops partway through '{cut['cut_in']}'."
+    if cut["not_included"]:
+        note += " Not included: " + ", ".join(f"'{t}'" for t in cut["not_included"]) + "."
+    if cut["cut_in"]:
+        note += f" Call get_article with section='{cut['cut_in']}' to read the rest of it."
+    return note
+
+
 @mcp.tool(annotations=READ_ONLY)
 async def get_article(title: str, section: str | None = None) -> dict:
     """Read a GTA VI page from the GTA Wiki as clean text, with quick facts
@@ -91,7 +105,7 @@ async def get_article(title: str, section: str | None = None) -> dict:
 
     parsed = clean.parse_page(page["wikitext"])
     section_titles = [s["title"] for s in parsed["sections"]]
-    content, truncated = clean.to_text(parsed, section)
+    content, cut = clean.to_text(parsed, section)
     if section and not content:
         return _with_source({
             "title": page["title"],
@@ -105,8 +119,8 @@ async def get_article(title: str, section: str | None = None) -> dict:
         notes.append(SPOILER_NOTE)
     if parsed["stub"] or parsed["word_count"] < 100:
         notes.append(SHORT_NOTE)
-    if truncated:
-        notes.append("Text was cut for length. Ask for a specific section to read more.")
+    if cut:
+        notes.append(_cut_note(cut, section, url))
 
     return _with_source({
         "title": page["title"],
