@@ -8,3 +8,6 @@ dist/
 build/
 *.egg-info/
 .claude/settings.local.json
+
+# local-only MCP config (points at localhost)
+.mcp.json
