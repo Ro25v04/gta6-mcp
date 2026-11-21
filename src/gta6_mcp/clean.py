@@ -35,6 +35,10 @@ SKIP_FACT_WORDS = ("image", "caption", "label")  # e.g. "front image2", "caption
 
 IMAGE_PREFIXES = ("file:", "image:", "category:", ":file:", ":image:")
 
+# Sections editors haven't written yet, e.g. "To Be Added..."
+PLACEHOLDER = re.compile(r"^(to be added|tba|tbd|coming soon)\W*$", re.IGNORECASE)
+NOT_WRITTEN = "Not on the wiki yet."
+
 
 def _name(template: Template) -> str:
     return str(template.name).strip().lower().replace("_", " ")
@@ -138,6 +142,8 @@ def parse_page(wikitext: str) -> dict:
     kept = []
     for title, nodes in sections:
         text = _tidy(_render(nodes))
+        if PLACEHOLDER.match(text):
+            text = NOT_WRITTEN
         lowered = title.lower()
         if text and lowered not in SKIP_SECTIONS and "leak" not in lowered:  # no leaked info
             kept.append({"title": title, "text": text})
@@ -167,4 +173,8 @@ def to_text(page: dict, section: str | None = None, max_chars: int = MAX_CHARS) 
     if len(text) <= max_chars:
         return text, False
     cut = text.rfind("\n\n", 0, max_chars)
-    return text[: cut if cut > 0 else max_chars].rstrip(), True
+    if cut < max_chars // 2:  # paragraph break too early (e.g. a long table): would lose too much
+        cut = text.rfind("\n", 0, max_chars)
+    if cut <= 0:
+        cut = max_chars
+    return text[:cut].rstrip(), True

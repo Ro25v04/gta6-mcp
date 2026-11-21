@@ -165,12 +165,15 @@ async def list_category(category: str, limit: int = 50) -> dict:
         notes.append(f"Showing the first {limit}; there may be more.")
     # Categories only include things with their own page. An overview article
     # with the same name (e.g. "Radio Stations in GTA VI") often has the full list.
-    if await wiki.page_exists(name):
-        response["overview_page"] = name
-        notes.append(
-            "This category only lists items that have their own page, so it may be "
-            "incomplete. Read overview_page with get_article for the full list."
-        )
+    # The overview may use the full game name, e.g. "Missions in Grand Theft Auto VI".
+    for candidate in (name, name.replace("GTA VI", "Grand Theft Auto VI")):
+        if await wiki.page_exists(candidate):
+            response["overview_page"] = candidate
+            notes.append(
+                "This category only lists items that have their own page, so it may be "
+                "incomplete. Read overview_page with get_article for the full list."
+            )
+            break
     response["notes"] = notes
     return _with_source(response)
 
