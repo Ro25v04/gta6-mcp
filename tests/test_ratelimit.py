@@ -37,3 +37,11 @@ def test_each_visitor_has_their_own_limit():
         _post(client, ip="1.1.1.1")
     assert _post(client, ip="1.1.1.1").status_code == 429
     assert _post(client, ip="2.2.2.2").status_code == 200
+
+
+def test_real_ip_header_wins_over_faked_forwarded_header():
+    client = _client()
+    for i in range(MAX_REQUESTS):
+        client.post("/mcp", headers={"X-Real-IP": "3.3.3.3", "X-Forwarded-For": f"10.0.0.{i}"})
+    response = client.post("/mcp", headers={"X-Real-IP": "3.3.3.3", "X-Forwarded-For": "10.0.0.99"})
+    assert response.status_code == 429
