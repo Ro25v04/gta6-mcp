@@ -3,10 +3,12 @@
 import os
 from urllib.parse import quote
 
+import uvicorn
 from mcp.server.mcpserver import MCPServer
 from mcp.types import ToolAnnotations
 
 from gta6_mcp import clean, filters, wiki
+from gta6_mcp.ratelimit import RateLimit
 
 SOURCE = "GTA Wiki (Fandom)"
 LICENCE = "CC BY-SA (https://www.fandom.com/licensing)"
@@ -205,12 +207,17 @@ async def list_category(category: str, limit: int = 50) -> dict:
 def main() -> None:
     """Start the server. Railway sets PORT; locally it defaults to 8000."""
     port = int(os.environ.get("PORT", "8000"))
-    mcp.run(
-        transport="streamable-http",
-        host="0.0.0.0",          # listen on all interfaces so Railway can reach it
-        port=port,               # served at http://<host>:<port>/mcp
+    app = mcp.streamable_http_app(  # served at http://<host>:<port>/mcp
         stateless_http=True,     # no per-user sessions: simpler and scales on Railway
         json_response=True,
+        host="0.0.0.0",
+    )
+    uvicorn.run(
+        RateLimit(app),          # 30 requests/minute per visitor
+        host="0.0.0.0",          # listen on all interfaces so Railway can reach it
+        port=port,
+        proxy_headers=True,
+        forwarded_allow_ips="*", # trust Railway's proxy for the real visitor address
     )
 
 

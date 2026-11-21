@@ -3,7 +3,11 @@
 Only fetches data. No filtering or cleaning happens here (see filters.py, clean.py).
 """
 
+import asyncio
+
 import httpx
+
+_WIKI_SLOTS = asyncio.Semaphore(5)  # at most 5 wiki requests at once, to be kind to Fandom
 
 API_URL = "https://gta.fandom.com/api.php"
 HEADERS = {"User-Agent": "gta6-mcp/0.1 (+https://github.com/Ro25v04/gta6-mcp)"}
@@ -18,7 +22,7 @@ async def _call(params: dict) -> dict:
     """Send one request to the wiki API and return the JSON reply."""
     params = {**params, "format": "json", "formatversion": "2"}
     try:
-        async with httpx.AsyncClient(headers=HEADERS, timeout=TIMEOUT) as client:
+        async with _WIKI_SLOTS, httpx.AsyncClient(headers=HEADERS, timeout=TIMEOUT) as client:
             response = await client.get(API_URL, params=params)
             response.raise_for_status()
             data = response.json()
