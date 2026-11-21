@@ -105,7 +105,8 @@ async def get_article(title: str, section: str | None = None) -> dict:
 
     parsed = clean.parse_page(page["wikitext"])
     section_titles = [s["title"] for s in parsed["sections"]]
-    content, cut = clean.to_text(parsed, section)
+    # One section is a focused request, so give it double the room.
+    content, cut = clean.to_text(parsed, section, max_chars=clean.MAX_CHARS * 2 if section else clean.MAX_CHARS)
     if section and not content:
         return _with_source({
             "title": page["title"],
