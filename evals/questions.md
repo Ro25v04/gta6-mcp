@@ -3,7 +3,7 @@
 Two kinds of checks:
 
 - **Automated:** `uv run python evals/run_evals.py` calls the live server's tools
-  directly (21 checks, no AI involved).
+  directly (21 checks).
 - **Manual (below):** ask these in claude.ai with the GTA 6 Wiki connector on.
   Start a new chat for each question. They test the AI and the server together.
 
